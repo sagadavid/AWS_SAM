@@ -1,34 +1,34 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  sam4
+Description: 'sam4
 
   Sample SAM Template for sam4
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+  '
 Globals:
   Function:
     Timeout: 3
-
 Resources:
   HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
-      CodeUri: hello-world/
+      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-s87tassqwsxk/2fe1b850b01c4982cc05eca58bc01b05
       Handler: app.lambdaHandler
       Runtime: nodejs18.x
       Architectures:
-        - x86_64
+      - x86_64
       Events:
         HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
             Path: /hello
             Method: get
+    Metadata:
+      SamResourceId: HelloWorldFunction
   ClockFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: clock/
+      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-s87tassqwsxk/7a2e763a679a52874c351c6b8b95b512
       Handler: handler.clock
       Runtime: nodejs18.x
       Events:
@@ -37,6 +37,8 @@ Resources:
           Properties:
             Path: /clock
             Method: get
+    Metadata:
+      SamResourceId: ClockFunction
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -44,22 +46,30 @@ Resources:
         Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
       ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
+    Metadata:
+      SamResourceId: ApplicationResourceGroup
   ApplicationInsightsMonitoring:
     Type: AWS::ApplicationInsights::Application
     Properties:
       ResourceGroupName:
         Ref: ApplicationResourceGroup
-      AutoConfigurationEnabled: "true"
+      AutoConfigurationEnabled: 'true'
+    Metadata:
+      SamResourceId: ApplicationInsightsMonitoring
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
     Description: API Gateway endpoint URL for Prod stage for Hello World function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
   HelloWorldFunction:
     Description: Hello World Lambda Function ARN
-    Value: !GetAtt HelloWorldFunction.Arn
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunction
+      - Arn
   HelloWorldFunctionIamRole:
     Description: Implicit IAM Role created for Hello World function
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunctionRole
+      - Arn
