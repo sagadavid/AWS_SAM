@@ -3,6 +3,9 @@
 
 
 # sam package --template-file template.yaml --output-template-file packageafterbucket.yml
-## cli above creates resolve issue.. fix with the below one:
+     ## cli above creates resolve issue.. fix with the below one:
 #sam package --resolve-s3 --output-template-file packaged.yaml
 #sam package --template-file template.yaml --output-template-file pck.yml --resolve-s3 -->
+
+# check on cloud formation:
+    https://eu-north-1.console.aws.amazon.com/cloudformation/home?region=eu-north-1#/stacks?filteringText=&filteringStatus=active&viewNested=true
