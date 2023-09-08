@@ -1,0 +1,7 @@
+Commands you can use next
+=========================
+[*] Create pipeline: cd sam2 && sam pipeline init --bootstrap
+[*] Validate SAM template: cd sam2 && sam validate
+[*] Test Function in the Cloud: cd sam2 && sam sync --stack-name {stack-name} --watch
+
+sam init --runtime [dotnet6, nodejs18.x, python3.10]
